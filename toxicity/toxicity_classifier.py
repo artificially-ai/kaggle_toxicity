@@ -126,7 +126,7 @@ class ToxicityClassifier:
         sample_submission = pd.read_csv("data/toxicity/sample_submission.csv")
 
         sample_submission[self.classes] = y_hat
-        sample_submission.to_csv(self.output_dir + 'submission_multicnn.csv', index=False)
+        sample_submission.to_csv(self.output_dir + '/submission_multicnn.csv', index=False)
 
     def train_model(self):
         X_train, X_valid, y_train, y_valid, X_test_sub = self.preprocess_data()
