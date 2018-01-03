@@ -73,7 +73,7 @@ class ToxicityClassifier:
         X_train = pad_sequences(train_tokenized_sentences, maxlen=self.max_review_length, padding=self.pad_type,
                                 truncating=self.trunc_type, value=0)
 
-        X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.3)
+        X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=self.test_split)
         return X_train, X_valid, y_train, y_valid
 
     def build_model(self):
@@ -120,5 +120,5 @@ class ToxicityClassifier:
         X_train, X_valid, y_train, y_valid = self.preprocess_data()
 
         model = self.compile_model()
-        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2, validation_split=.1,
+        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2, validation_split=self.val_split,
                   callbacks=[self.modelCheckPoint, self.earlyStopping])
