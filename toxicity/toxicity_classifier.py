@@ -48,6 +48,7 @@ class ToxicityClassifier:
 
         self.train_df = None
         self.test_df = None
+        self.classes = None
         self.modelCheckPoint = None
         self.earlyStopping = None
 
@@ -66,15 +67,20 @@ class ToxicityClassifier:
         tokenizer = text.Tokenizer(num_words=self.unique_words)
         tokenizer.fit_on_texts(list(train_sentences_series))
         train_tokenized_sentences = tokenizer.texts_to_sequences(train_sentences_series)
-
-        classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
-        y_train = self.train_df[classes].values
-
         X_train = pad_sequences(train_tokenized_sentences, maxlen=self.max_review_length, padding=self.pad_type,
                                 truncating=self.trunc_type, value=0)
 
+        self.classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
+        y_train = self.train_df[self.classes].values
+
+        # Tokeninze the Test data
+        test_sentences_series = self.test_df['comment_text'].fillna("_").values
+        test_tokenized_sentences = tokenizer.texts_to_sequences(test_sentences_series)
+        X_test_sub = pad_sequences(test_tokenized_sentences, maxlen=self.max_review_length, padding=self.pad_type,
+                                   truncating=self.trunc_type, value=0)
+
         X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=self.test_split)
-        return X_train, X_valid, y_train, y_valid
+        return X_train, X_valid, y_train, y_valid, X_test_sub
 
     def build_model(self):
         input_layer = Input(shape=(self.max_review_length,), dtype='int16', name='input')
@@ -116,9 +122,19 @@ class ToxicityClassifier:
 
         return model
 
+    def save_submission(self, y_hat):
+        sample_submission = pd.read_csv("data/toxicity/sample_submission.csv")
+
+        sample_submission[self.classes] = y_hat
+        sample_submission.to_csv(self.output_dir + 'submission_multicnn.csv', index=False)
+
     def train_model(self):
-        X_train, X_valid, y_train, y_valid = self.preprocess_data()
+        X_train, X_valid, y_train, y_valid, X_test_sub = self.preprocess_data()
 
         model = self.compile_model()
-        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2, validation_split=self.val_split,
+        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2, validation_data=(X_valid, y_valid),
                   callbacks=[self.modelCheckPoint, self.earlyStopping])
+
+        model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
+        y_hat = model.predict(X_test_sub)
+        self.save_submission(y_hat)
