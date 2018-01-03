@@ -25,6 +25,9 @@ class ToxicityClassifier:
         self.epochs = hyper_parameters['epochs']
         self.batch_size = hyper_parameters['batch_size']
         self.patience = hyper_parameters['patience']
+        self.activation_fn = hyper_parameters['activation_fn']
+        self.test_split = hyper_parameters['test_split']
+        self.val_split = hyper_parameters['val_split']
 
         self.input_dimensions = hyper_parameters['input_dimensions']
         self.unique_words = hyper_parameters['unique_words']
@@ -80,20 +83,20 @@ class ToxicityClassifier:
             input_layer)
         drop_embed_layer = SpatialDropout1D(self.embedding_dropout, name='drop_embed')(embedding_layer)
 
-        conv_1 = Conv1D(self.n_conv_1, self.k_conv_1, activation='ReLU_s', name='conv_1')(drop_embed_layer)
+        conv_1 = Conv1D(self.n_conv_1, self.k_conv_1, activation=self.activation_fn, name='conv_1')(drop_embed_layer)
         maxp_1 = GlobalMaxPool1D(name='maxp_1')(conv_1)
 
-        conv_2 = Conv1D(self.n_conv_2, self.k_conv_2, activation='ReLU_s', name='conv_2')(drop_embed_layer)
+        conv_2 = Conv1D(self.n_conv_2, self.k_conv_2, activation=self.activation_fn, name='conv_2')(drop_embed_layer)
         maxp_2 = GlobalMaxPool1D(name='maxp_2')(conv_2)
 
-        conv_3 = Conv1D(self.n_conv_3, self.k_conv_3, activation='ReLU_s', name='conv_3')(drop_embed_layer)
+        conv_3 = Conv1D(self.n_conv_3, self.k_conv_3, activation=self.activation_fn, name='conv_3')(drop_embed_layer)
         maxp_3 = GlobalMaxPool1D(name='maxp_3')(conv_3)
 
         concat = concatenate([maxp_1, maxp_2, maxp_3])
 
-        dense_layer_1 = Dense(self.dense_1_dimenssions, activation='ReLU_s', name='dense_1')(concat)
+        dense_layer_1 = Dense(self.dense_1_dimenssions, activation=self.activation_fn, name='dense_1')(concat)
         drop_dense_layer_1 = Dropout(self.dense_dropout, name='drop_dense_1')(dense_layer_1)
-        dense_layer_2 = Dense(self.dense_2_dimenssions, activation='ReLU_s', name='dense_2')(drop_dense_layer_1)
+        dense_layer_2 = Dense(self.dense_2_dimenssions, activation=self.activation_fn, name='dense_2')(drop_dense_layer_1)
         drop_dense_layer_2 = Dropout(self.dense_dropout, name='drop_dense_2')(dense_layer_2)
 
         predictions = Dense(self.classes, activation='sigmoid', name='output')(drop_dense_layer_2)

@@ -7,11 +7,11 @@ from keras.layers import Activation
 class ReLUs(Activation):
     def __init__(self, activation, **kwargs):
         super(ReLUs, self).__init__(activation, **kwargs)
-        self.__name__ = 'ReLU_s'
+        self.__name__ = 'relus'
 
     @staticmethod
     def config():
-        get_custom_objects().update({'ReLU_s': ReLUs(ReLUs.relus)})
+        get_custom_objects().update({'relus': ReLUs(ReLUs.relus)})
 
     @staticmethod
     def relus(Z):
