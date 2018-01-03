@@ -30,6 +30,7 @@ You are not encouraged to run it locally as you would have to go through a depen
 ## Running with Docker
 
 You are expected to have a Docker engine installed on your MacBook or laptop.
+The Docker image contains the Kaggle datasets. So, there is no need to download it.
 
 1. ```docker run -d -v [path_to_hyperparams.json]:/data ekholabs/toxicity```
   * There is an example file under the ```examples``` directory.
