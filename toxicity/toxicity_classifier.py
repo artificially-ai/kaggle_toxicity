@@ -20,7 +20,7 @@ class ToxicityClassifier:
     def __init__(self, hyper_parameters):
         self.output_dir = 'model_output/multi-conv'
 
-        self.classes = hyper_parameters['classes']
+        self.n_classes = hyper_parameters['n_classes']
 
         self.epochs = hyper_parameters['epochs']
         self.batch_size = hyper_parameters['batch_size']
@@ -105,7 +105,7 @@ class ToxicityClassifier:
         dense_layer_2 = Dense(self.dense_2_dimenssions, activation=self.activation_fn, name='dense_2')(drop_dense_layer_1)
         drop_dense_layer_2 = Dropout(self.dense_dropout, name='drop_dense_2')(dense_layer_2)
 
-        predictions = Dense(self.classes, activation='sigmoid', name='output')(drop_dense_layer_2)
+        predictions = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_2)
 
         return Model(input_layer, predictions)
 

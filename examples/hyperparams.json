@@ -1,5 +1,5 @@
 {
-  "classes" : 6,
+  "n_classes" : 6,
   "epochs" : 6,
   "batch_size" : 32,
   "patience" : 3,
