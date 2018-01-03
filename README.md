@@ -11,12 +11,6 @@ The model built here uses an activation function I have developed myself, which 
 competition. The function has demonstrated to be better than the ReLU function. More about the ReLUs function (as I call it),
 will soon be available in a separate paper, as there is a hyper parameter that needs to be tuned depending on the network architecture.
 
-## Dependencies
-
-To get this model running, one has to first go to the [Automated ML](https://github.com/ekholabs/automated_ml) repository I created.
-That repository contains some Terraform modules that are used to build the AWS infrastructure from scratch. Only a couple of
-manual steps are needed, like creating an AWS account and key-pair.
-
 ## Performance
 
 ### MacBook Pro
@@ -26,3 +20,21 @@ On a MacBook Pro, with 16GB, 4 cores, Intel i7, one epoch takes about 30 minutes
 ### AWS
 
 On a g2.2xlarge GPU Instance, with 15GB and 8 vCPUs, one epoch takes about 3 minutes. Quite impressive!
+
+# Running the Model
+
+## Running Locally
+
+You are not encouraged to run it locally as you would have to go through a dependency hell. Instead, just go to the next section and try it out with Docker!
+
+## Running with Docker
+
+You are expected to have a Docker engine installed on your MacBook or laptop.
+
+1. ```docker run -d -v [path_to_hyperparams.json]:/data ekholabs/toxicity```
+  * There is an example file under the ```examples``` directory.
+
+There might be some errors after the execution is done, as the code is expected to connect to a AWS S3 bucket to transfer 
+the best model weights and results.
+
+More information on running it with Terraform can be found in the [Automated ML](https://github.com/ekholabs/automated_ml) repository I created.
