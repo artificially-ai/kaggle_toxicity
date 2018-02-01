@@ -19,7 +19,7 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
         self.n_lstm_2 = hyper_parameters['lstm_2_dimensions']
         self.drop_lstm = hyper_parameters['lstm_dropout']
 
-        self.dense_1_dimenssions = hyper_parameters['dense_1_dimenssions']
+        self.dense_1_dimenssions = hyper_parameters['dense_1_dimensions']
         self.dense_dropout = hyper_parameters['dense_dropout']
 
     def build_model(self):
