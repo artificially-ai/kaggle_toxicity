@@ -23,20 +23,9 @@ On a g2.2xlarge GPU Instance, with 15GB and 8 vCPUs, one epoch takes about 3 min
 
 # Running the Model
 
-## Running Locally
-
-You are not encouraged to run it locally as you would have to go through a dependency hell. Instead, just go to the next section and try it out with Docker!
-
 ## Running with Docker
 
-You are expected to have a Docker engine installed on your MacBook or laptop.
-The Docker image contains the Kaggle datasets. So, there is no need to download it.
+The Docker image, which contains the source code, is executed from another poject which is able to spin up a whole AWS environment for the model to run.
+Since it depends on the NVIDIA Cuda Drivers, it won't be possible to run it locally.
 
-1. ```docker run -d -v [path_to_hyperparams.json]:/data ekholabs/toxicity python main.py [model type]```
-  * There are example files under the ```examples``` directory.
-  * the ```model type``` can be either *cnn* or *lstm*. Don't try something else.
-
-There might be some errors after the execution is done, as the code is expected to connect to a AWS S3 bucket to transfer 
-the best model weights and results.
-
-More information on running it with Terraform can be found in the [Automated ML](https://github.com/ekholabs/automated_ml) repository I created.
+More information on running it with Terraform can be found in the [Automated ML](https://github.com/ekholabs/automated_ml) repository.
