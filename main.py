@@ -1,7 +1,6 @@
 import sys
 import json
 
-from toxicity.toxicity_cnn_classifier import ToxicityClassifier
 from toxicity.toxicity_cnn_classifier import ToxicityCNNClassifier
 from toxicity.toxicity_lstm_classifier import ToxicityLSTMClassifier
 
@@ -15,10 +14,10 @@ if __name__ == '__main__':
         print('Please, pass the model type you want to execute. for example, "cnn" or "lstm".')
         sys.exit(1)
 
-    model_type = sys.argv[1][0]
-    hyperparams = 'hyperparams_%s.json' % model_type
+    model_type = sys.argv[1]
+    params = 'hyperparams_%s.json' % model_type
 
-    hyper_parameters = json.load(open('/data/%s' % hyperparams))
+    hyper_parameters = json.load(open('/data/%s' % params))
     toxicity = classifiers[model_type]
     toxicity.init(hyper_parameters)
     toxicity.train_model()
