@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from keras.models import Sequential
-from keras.layers import Dense, Embedding, LSTM, Dropout
+from keras.layers import Dense, Embedding, LSTM, Dropout, Flatten
 from keras.layers.wrappers import Bidirectional
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -30,6 +30,9 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
 
         model.add(Dense(self.dense_1_dimenssions, activation=self.activation_fn))
         model.add(Dropout(self.dense_dropout))
+
+        model.add(Flatten())
+
         model.add(Dense(self.n_classes, activation='softmax'))
 
         return model
