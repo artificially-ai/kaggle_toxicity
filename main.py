@@ -1,11 +1,26 @@
-from toxicity.toxicity_classifier import ToxicityClassifier
-from subprocess import call
-
+import sys
 import json
 
+from toxicity.toxicity_cnn_classifier import ToxicityClassifier
+from toxicity.toxicity_cnn_classifier import ToxicityCNNClassifier
+from toxicity.toxicity_lstm_classifier import ToxicityLSTMClassifier
+
+from subprocess import call
+
 if __name__ == '__main__':
-    hyper_parameters = json.load(open('/data/hyperparams.json'))
-    toxicity = ToxicityClassifier(hyper_parameters)
+
+    classifiers = {'cnn' : ToxicityCNNClassifier(), 'lstm' : ToxicityLSTMClassifier() }
+
+    if len(sys.argv) < 2:
+        print('Please, pass the model type you want to execute. for example, "cnn" or "lstm".')
+        sys.exit(1)
+
+    model_type = sys.argv[1]
+    hyperparameter = 'hyperparams_%s.json' % model_type
+
+    hyper_parameters = json.load(open('/data/%s' % hyperparameter))
+    toxicity = classifiers[model_type]
+    toxicity.init(hyper_parameters)
     toxicity.train_model()
 
     call("cp /data/config /root/.aws/.".split(sep=' '))

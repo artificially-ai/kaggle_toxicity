@@ -2,7 +2,7 @@ FROM ekholabs/nvidia-cuda
 
 MAINTAINER Wilder Rodrigues <wilder.rodrigues@ekholabs.ai>
 
-RUN conda install -c conda-forge 'tensorflow-gpu=1.0*' -y && \
+RUN conda install -c conda-forge tensorflow-gpu -y && \
     conda install -c conda-forge numpy keras nltk -y && \
     pip install aws-shell
 
@@ -16,5 +16,5 @@ ADD . /ekholabs/toxicity
 
 ENV PYTHONPATH=$PYTHONPATH:.
 
-ENTRYPOINT ["python"]
-CMD ["main.py"]
+ENTRYPOINT [ "/usr/bin/tini", "--" ]
+CMD [ "/bin/bash" ]

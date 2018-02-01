@@ -10,13 +10,14 @@ class ReLUs(Activation):
         self.__name__ = 'relus'
 
     @staticmethod
-    def config():
+    def config(e_param):
+        ReLUs.e_param = e_param
         get_custom_objects().update({'relus': ReLUs(ReLUs.relus)})
 
     @staticmethod
     def relus(Z):
-        e_param = 1.1
+        e = ReLUs.e_param
         pi = K.variable((3.14))
-        m = e_param + (K.sigmoid(K.sin(Z)) - K.sigmoid(K.cos(Z)) * K.exp(K.sqrt(pi)))
+        m = e + (K.sigmoid(K.sin(Z)) - K.sigmoid(K.cos(Z)) * K.exp(K.sqrt(pi)))
         A = K.maximum(m, Z)
         return A

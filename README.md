@@ -32,8 +32,9 @@ You are not encouraged to run it locally as you would have to go through a depen
 You are expected to have a Docker engine installed on your MacBook or laptop.
 The Docker image contains the Kaggle datasets. So, there is no need to download it.
 
-1. ```docker run -d -v [path_to_hyperparams.json]:/data ekholabs/toxicity```
-  * There is an example file under the ```examples``` directory.
+1. ```docker run -d -v [path_to_hyperparams.json]:/data ekholabs/toxicity python main.py [model type]```
+  * There are example files under the ```examples``` directory.
+  * the ```model type``` can be either *cnn* or *lstm*. Don't try something else.
 
 There might be some errors after the execution is done, as the code is expected to connect to a AWS S3 bucket to transfer 
 the best model weights and results.
