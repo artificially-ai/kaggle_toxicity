@@ -13,11 +13,11 @@ from toxicity.toxicity_classifier import ToxicityClassifier
 class ToxicityCNNClassifier(ToxicityClassifier):
 
     def init(self, hyper_parameters):
-        super().init('model_output/multi-conv', hyper_parameters)
+        super().init('model_output/cnn', hyper_parameters)
 
-        self.n_conv_1 = hyper_parameters['layer_1_dimenssions']
-        self.n_conv_2 = hyper_parameters['layer_2_dimenssions']
-        self.n_conv_3 = hyper_parameters['layer_3_dimenssions']
+        self.n_conv_1 = hyper_parameters['layer_1_dimensions']
+        self.n_conv_2 = hyper_parameters['layer_2_dimensions']
+        self.n_conv_3 = hyper_parameters['layer_3_dimensions']
         self.k_conv_1 = hyper_parameters['kernel_1']
         self.k_conv_2 = hyper_parameters['kernel_2']
         self.k_conv_3 = hyper_parameters['kernel_3']

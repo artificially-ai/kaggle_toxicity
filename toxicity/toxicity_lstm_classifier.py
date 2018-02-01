@@ -13,10 +13,10 @@ from toxicity.toxicity_classifier import ToxicityClassifier
 class ToxicityLSTMClassifier(ToxicityClassifier):
 
     def init(self, hyper_parameters):
-        super().init('model_output/bi_lstm', hyper_parameters)
+        super().init('model_output/lstm', hyper_parameters)
 
-        self.n_lstm_1 = hyper_parameters['lstm_1_dimenssions']
-        self.n_lstm_2 = hyper_parameters['lstm_2_dimenssions']
+        self.n_lstm_1 = hyper_parameters['lstm_1_dimensions']
+        self.n_lstm_2 = hyper_parameters['lstm_2_dimensions']
         self.drop_lstm = hyper_parameters['lstm_dropout']
 
         self.dense_1_dimenssions = hyper_parameters['dense_1_dimenssions']
