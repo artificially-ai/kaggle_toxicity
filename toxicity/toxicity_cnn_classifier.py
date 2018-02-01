@@ -28,8 +28,8 @@ class ToxicityCNNClassifier(ToxicityClassifier):
     def build_model(self):
         input_layer = Input(shape=(self.max_review_length,), dtype='int16', name='input')
 
-        embedding_layer = Embedding(self.unique_words, self.input_dimensions, input_length=self.max_review_length, name='embedding_1')(
-            input_layer)
+        embedding_layer = Embedding(self.unique_words, self.input_dimensions, input_length=self.max_review_length,
+                                    name='embedding_1')(input_layer)
 
         conv_1 = Conv1D(self.n_conv_1, self.k_conv_1, activation=self.activation_fn, name='conv_1')(embedding_layer)
         maxp_1 = GlobalMaxPool1D(name='maxp_1')(conv_1)
@@ -45,16 +45,18 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         dense_layer_1 = Dense(self.dense_1_dimenssions, activation=self.activation_fn, name='dense_1')(concat)
         drop_dense_layer_1 = Dropout(self.dense_dropout, name='drop_dense_1')(dense_layer_1)
 
-        predictions = Dense(self.n_classes, activation='softmax', name='output')(drop_dense_layer_1)
+        output = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_1)
 
-        return Model(input_layer, predictions)
+        return Model(input_layer, output)
 
     def compile_model(self):
         model = self.build_model()
+        print(model.summary())
+
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        self.modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5', save_best_only=True,
-                                          mode='min')
+        self.modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
+                                               save_best_only=True, mode='min')
         self.earlyStopping = EarlyStopping(mode='min', patience=self.patience)
 
         if not os.path.exists(self.output_dir):
@@ -66,8 +68,8 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         X_train, X_valid, y_train, y_valid, X_test_sub = self.preprocess_data()
 
         model = self.compile_model()
-        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2, validation_data=(X_valid, y_valid),
-                  callbacks=[self.modelCheckPoint, self.earlyStopping])
+        model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2,
+                  validation_data=(X_valid, y_valid), callbacks=[self.modelCheckPoint, self.earlyStopping])
 
         model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
         y_hat = model.predict(X_test_sub)
