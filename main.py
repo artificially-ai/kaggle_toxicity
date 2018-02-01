@@ -26,4 +26,4 @@ if __name__ == '__main__':
     call("cp /data/config /root/.aws/.".split(sep=' '))
     call("cp /data/credentials /root/.aws/.".split(sep=' '))
 
-    call("aws s3 cp --recursive /ekholabs/toxicity/model_output/multi-conv s3://ekholabs-kaggle-models".split(sep=' '))
+    call("aws s3 cp --recursive /ekholabs/toxicity/model_output/" + model_type +" s3://ekholabs-kaggle-models".split(sep=' '))
