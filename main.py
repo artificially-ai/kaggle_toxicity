@@ -8,7 +8,7 @@ from subprocess import call
 
 if __name__ == '__main__':
 
-    classifiers = {'cnn': ToxicityCNNClassifier(), 'lstm': ToxicityLSTMClassifier()}
+    classifiers = {'cnn': ToxicityCNNClassifier('model_output/cnn'), 'lstm': ToxicityLSTMClassifier('model_output/lstm')}
 
     if len(sys.argv) < 2:
         print('Please, pass the model type you want to execute. for example, "cnn" or "lstm".')
@@ -16,6 +16,7 @@ if __name__ == '__main__':
 
     model_type = sys.argv[1]
     params = 'hyperparams_%s.json' % model_type
+    print('Parameters file:', params)
 
     hyper_parameters = json.load(open('/data/%s' % params))
     toxicity = classifiers[model_type]

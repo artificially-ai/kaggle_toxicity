@@ -12,8 +12,11 @@ from toxicity.toxicity_classifier import ToxicityClassifier
 
 class ToxicityCNNClassifier(ToxicityClassifier):
 
+    def __init__(self, output_dir):
+        super().__init__(output_dir)
+
     def init(self, hyper_parameters):
-        super().init('model_output/cnn', hyper_parameters)
+        super().init(hyper_parameters)
 
         self.n_conv_1 = hyper_parameters['layer_1_dimensions']
         self.n_conv_2 = hyper_parameters['layer_2_dimensions']
@@ -59,12 +62,6 @@ class ToxicityCNNClassifier(ToxicityClassifier):
 
         return model
 
-    def save_submission(self, y_hat):
-        sample_submission = pd.read_csv("data/toxicity/sample_submission.csv")
-
-        sample_submission[self.classes] = y_hat
-        sample_submission.to_csv(self.output_dir + '/submission_multicnn.csv', index=False)
-
     def train_model(self):
         X_train, X_valid, y_train, y_valid, X_test_sub = self.preprocess_data()
 
@@ -75,3 +72,9 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
         y_hat = model.predict(X_test_sub)
         self.save_submission(y_hat)
+
+    def save_submission(self, y_hat):
+        sample_submission = pd.read_csv("data/toxicity/sample_submission.csv")
+
+        sample_submission[self.classes] = y_hat
+        sample_submission.to_csv(self.output_dir + '/submission_multicnn.csv', index=False)

@@ -10,9 +10,10 @@ from activations.ReLUs import ReLUs
 
 class ToxicityClassifier:
 
-    def init(self, output_dir, hyper_parameters):
+    def __init__(self, output_dir):
         self.output_dir = output_dir
 
+    def init(self, hyper_parameters):
         self.n_classes = hyper_parameters['n_classes']
 
         self.epochs = hyper_parameters['epochs']
