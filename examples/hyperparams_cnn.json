@@ -10,12 +10,12 @@
   "unique_words" : 30000,
   "max_review_length" : 300,
   "padding" : "pre",
-  "layer_1_dimenssions" : 128,
-  "layer_2_dimenssions" : 256,
-  "layer_3_dimenssions" : 512,
+  "layer_1_dimensions" : 128,
+  "layer_2_dimensions" : 256,
+  "layer_3_dimensions" : 512,
   "kernel_1" : 2,
   "kernel_2" : 4,
   "kernel_3" : 5,
-  "dense_1_dimenssions" : 1024,
+  "dense_1_dimensions" : 1024,
   "dense_dropout" : 0.25
 }
