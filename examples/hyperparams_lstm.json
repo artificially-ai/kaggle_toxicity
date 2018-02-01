@@ -8,11 +8,11 @@
   "test_split" : 0.1,
   "input_dimensions" : 128,
   "unique_words" : 20000,
-  "max_review_length" : 300,
+  "max_review_length" : 200,
   "padding" : "pre",
-  "lstm_1_dimensions" : 128,
+  "lstm_1_dimensions" : 64,
   "lstm_2_dimensions" : 128,
   "lstm_dropout" : 0.25,
-  "dense_1_dimensions" : 256,
+  "dense_1_dimensions" : 128,
   "dense_dropout" : 0.25
 }
