@@ -62,21 +62,21 @@ class ToxicityCNNClassifier(ToxicityClassifier):
 
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        self.modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
+        modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
                                                save_best_only=True, mode='min')
-        self.earlyStopping = EarlyStopping(mode='min', patience=self.patience)
+        earlyStopping = EarlyStopping(mode='min', patience=self.patience)
 
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        return model
+        return modelCheckPoint, earlyStopping, model
 
     def train_model(self):
         X_train, X_valid, y_train, y_valid, X_test_sub = self.preprocess_data()
 
-        model = self.compile_model()
+        modelCheckPoint, earlyStopping, model = self.compile_model()
         model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2,
-                  validation_data=(X_valid, y_valid), callbacks=[self.modelCheckPoint, self.earlyStopping])
+                  validation_data=(X_valid, y_valid), callbacks=[modelCheckPoint, earlyStopping])
 
         model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
         y_hat = model.predict(X_test_sub)
