@@ -24,14 +24,9 @@ class ToxicityClassifier:
         self.max_review_length = hyper_parameters['max_review_length']
         self.pad_type = self.trunc_type = hyper_parameters['padding']
 
-        self.dense_1_dimenssions = hyper_parameters['dense_1_dimensions']
-        self.dense_dropout = hyper_parameters['dense_dropout']
-
         self.train_df = None
         self.test_df = None
         self.classes = None
-        self.modelCheckPoint = None
-        self.earlyStopping = None
 
         self.load_data()
 

@@ -27,6 +27,9 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         self.k_conv_2 = hyper_parameters['kernel_2']
         self.k_conv_3 = hyper_parameters['kernel_3']
 
+        self.dense_1_dimenssions = hyper_parameters['dense_1_dimensions']
+        self.dense_dropout = hyper_parameters['dense_dropout']
+
         self.e_param = hyper_parameters['e_param']
         self.activation_fn = hyper_parameters['activation_fn']
 
