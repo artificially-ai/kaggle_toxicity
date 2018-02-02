@@ -9,6 +9,8 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 from toxicity.toxicity_classifier import ToxicityClassifier
 
+from activations.ReLUs import ReLUs
+
 
 class ToxicityCNNClassifier(ToxicityClassifier):
 
@@ -24,6 +26,11 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         self.k_conv_1 = hyper_parameters['kernel_1']
         self.k_conv_2 = hyper_parameters['kernel_2']
         self.k_conv_3 = hyper_parameters['kernel_3']
+
+        self.e_param = hyper_parameters['e_param']
+        self.activation_fn = hyper_parameters['activation_fn']
+
+        ReLUs.config(self.e_param)
 
     def build_model(self):
         input_layer = Input(shape=(self.max_review_length,), dtype='int16', name='input')

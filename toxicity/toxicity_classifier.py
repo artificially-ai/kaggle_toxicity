@@ -5,8 +5,6 @@ from keras.preprocessing import text
 
 from sklearn.model_selection import train_test_split
 
-from activations.ReLUs import ReLUs
-
 
 class ToxicityClassifier:
 
@@ -19,8 +17,6 @@ class ToxicityClassifier:
         self.epochs = hyper_parameters['epochs']
         self.batch_size = hyper_parameters['batch_size']
         self.patience = hyper_parameters['patience']
-        self.e_param = hyper_parameters['e_param']
-        self.activation_fn = hyper_parameters['activation_fn']
         self.test_split = hyper_parameters['test_split']
 
         self.input_dimensions = hyper_parameters['input_dimensions']
@@ -36,8 +32,6 @@ class ToxicityClassifier:
         self.classes = None
         self.modelCheckPoint = None
         self.earlyStopping = None
-
-        ReLUs.config(self.e_param)
 
         self.load_data()
 
