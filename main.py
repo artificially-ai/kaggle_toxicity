@@ -6,6 +6,8 @@ from toxicity.toxicity_lstm_classifier import ToxicityLSTMClassifier
 
 from subprocess import call
 
+from utils.s3 import S3Utils
+
 if __name__ == '__main__':
 
     classifiers = {'cnn': ToxicityCNNClassifier('model_output/cnn'), 'lstm': ToxicityLSTMClassifier('model_output/lstm')}
@@ -23,8 +25,4 @@ if __name__ == '__main__':
     toxicity.init(hyper_parameters)
     toxicity.train_model()
 
-    call("cp /data/config /root/.aws/.".split(sep=' '))
-    call("cp /data/credentials /root/.aws/.".split(sep=' '))
-
-    aws_cmd = "aws s3 cp --recursive /ekholabs/toxicity/model_output/%s s3://ekholabs-kaggle-models" % model_type
-    call(aws_cmd.split(sep=' '))
+    S3Utils.upload(model_type)
