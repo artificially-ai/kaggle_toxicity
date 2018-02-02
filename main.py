@@ -4,8 +4,6 @@ import json
 from toxicity.toxicity_cnn_classifier import ToxicityCNNClassifier
 from toxicity.toxicity_lstm_classifier import ToxicityLSTMClassifier
 
-from subprocess import call
-
 from utils.s3 import S3Utils
 
 if __name__ == '__main__':
