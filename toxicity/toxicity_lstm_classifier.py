@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from keras.models import Input, Model
-from keras.layers import Dense, Embedding, LSTM, concatenate
+from keras.layers import Dense, Embedding, LSTM, concatenate, Flatten
 from keras.layers.wrappers import Bidirectional
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -34,7 +34,8 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
 
         concat = concatenate([bi_lstm_1, bi_lstm_2])
 
-        output = Dense(self.n_classes, activation='sigmoid', name='output')(concat)
+        flat = Flatten()(concat)
+        output = Dense(self.n_classes, activation='sigmoid', name='output')(flat)
 
         return Model(input_layer, output)
 
