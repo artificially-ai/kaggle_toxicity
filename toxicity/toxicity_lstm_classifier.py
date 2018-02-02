@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from keras.models import Input, Model
-from keras.layers import Dense, Embedding, LSTM, Dropout, concatenate
+from keras.layers import Dense, Embedding, LSTM, concatenate
 from keras.layers.wrappers import Bidirectional
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -22,9 +22,6 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
         self.n_lstm_2 = hyper_parameters['lstm_2_dimensions']
         self.drop_lstm = hyper_parameters['lstm_dropout']
 
-        self.dense_1_dimensions = hyper_parameters['dense_1_dimensions']
-        self.dense_dropout = hyper_parameters['dense_dropout']
-
     def build_model(self):
         input_layer = Input(shape=(self.max_review_length,), dtype='int16', name='input')
         embedding_layer = Embedding(self.unique_words, self.input_dimensions, input_length=self.max_review_length,
@@ -37,9 +34,7 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
 
         concat = concatenate([bi_lstm_1, bi_lstm_2])
 
-        dense_layer_1 = Dense(self.dense_1_dimensions, activation=self.activation_fn)(concat)
-        drop_dense_layer_1 = Dropout(self.dense_dropout, name='drop_dense_1')(dense_layer_1)
-        output = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_1)
+        output = Dense(self.n_classes, activation='sigmoid', name='output')(concat)
 
         return Model(input_layer, output)
 
