@@ -1,7 +1,7 @@
 {
   "n_classes" : 6,
   "epochs" : 6,
-  "batch_size" : 64,
+  "batch_size" : 128,
   "patience" : 1,
   "activation_fn" : "relus",
   "e_param" : 1.8,
