@@ -3,7 +3,6 @@ import pandas as pd
 
 from keras.models import Input, Model
 from keras.layers import Dense, Embedding, LSTM, concatenate, Flatten
-from keras.layers.wrappers import Bidirectional
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
@@ -27,15 +26,18 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
         embedding_layer = Embedding(self.unique_words, self.input_dimensions, input_length=self.max_review_length,
                                     name='embedding_1')(input_layer)
 
-        bi_lstm_1 = Bidirectional(LSTM(self.n_lstm_1, dropout=self.drop_lstm, return_sequences=True,
-                                       name='bi_lstm_1'))(embedding_layer)
-        bi_lstm_2 = Bidirectional(LSTM(self.n_lstm_2, dropout=self.drop_lstm, return_sequences=True,
-                                       name='bi_lstm_2'))(embedding_layer)
+        lstm_1 = LSTM(self.n_lstm_1, dropout=self.drop_lstm, return_sequences=True,
+                                       name='lstm_1')(embedding_layer)
 
-        concat = concatenate([bi_lstm_1, bi_lstm_2])
+        lstm_2 = LSTM(self.n_lstm_2, dropout=self.drop_lstm, return_sequences=True,
+                                       name='lstm_2')(lstm_1)
 
-        flat = Flatten()(concat)
-        output = Dense(self.n_classes, activation='sigmoid', name='output')(flat)
+        concat = concatenate([lstm_1, lstm_2])
+
+        densor = Dense(64, activation="relu")(concat)
+        flat = Flatten()(densor)
+
+        output = Dense(self.n_classes, activation='softmax', name='output')(flat)
 
         return Model(input_layer, output)
 
@@ -43,7 +45,7 @@ class ToxicityLSTMClassifier(ToxicityClassifier):
         model = self.build_model()
         print(model.summary())
 
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-lstm-toxicity.hdf5',
                                                save_best_only=True, mode='min')
