@@ -63,7 +63,7 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         dense_layer_1 = Dense(self.dense_1_dimenssions, activation=self.activation_fn, name='dense_1')(concat)
         drop_dense_layer_1 = Dropout(self.dense_dropout, name='drop_dense_1')(dense_layer_1)
 
-        output = Dense(self.n_classes, activation='softmax', name='output')(drop_dense_layer_1)
+        output = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_1)
 
         return Model(input_layer, output)
 
@@ -71,7 +71,7 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         model = self.build_model()
         print(model.summary())
 
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         modelCheckPoint = ModelCheckpoint(monitor='val_acc', filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
                                                save_best_only=True, mode='max')
