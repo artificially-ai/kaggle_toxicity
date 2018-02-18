@@ -16,6 +16,7 @@
   "kernel_1" : 2,
   "kernel_2" : 4,
   "kernel_3" : 5,
+  "conv_dropout" : 0.5,
   "dense_1_dimensions" : 1024,
   "dense_dropout" : 0.25
 }

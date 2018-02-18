@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from keras.models import Model
-from keras.layers import Input, concatenate, Dense, Dropout
+from keras.layers import Input, concatenate, Dense, Dropout, BatchNormalization
 from keras.layers import Embedding, Conv1D, GlobalMaxPool1D
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -27,6 +27,8 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         self.k_conv_2 = hyper_parameters['kernel_2']
         self.k_conv_3 = hyper_parameters['kernel_3']
 
+        self.conv_dropout = hyper_parameters['conv_dropout']
+
         self.dense_1_dimenssions = hyper_parameters['dense_1_dimensions']
         self.dense_dropout = hyper_parameters['dense_dropout']
 
@@ -43,19 +45,25 @@ class ToxicityCNNClassifier(ToxicityClassifier):
 
         conv_1 = Conv1D(self.n_conv_1, self.k_conv_1, activation=self.activation_fn, name='conv_1')(embedding_layer)
         maxp_1 = GlobalMaxPool1D(name='maxp_1')(conv_1)
+        drop_1 = Dropout(self.conv_dropout, name='conv_drop_1')(maxp_1)
+        norm_1 = BatchNormalization(name='norm_1')(drop_1)
 
         conv_2 = Conv1D(self.n_conv_2, self.k_conv_2, activation=self.activation_fn, name='conv_2')(embedding_layer)
         maxp_2 = GlobalMaxPool1D(name='maxp_2')(conv_2)
+        drop_2 = Dropout(self.conv_dropout, name='conv_drop_2')(maxp_2)
+        norm_2 = BatchNormalization(name='norm_2')(drop_2)
 
         conv_3 = Conv1D(self.n_conv_3, self.k_conv_3, activation=self.activation_fn, name='conv_3')(embedding_layer)
         maxp_3 = GlobalMaxPool1D(name='maxp_3')(conv_3)
+        drop_3 = Dropout(self.conv_dropout, name='conv_drop_3')(maxp_3)
+        norm_3 = BatchNormalization(name='norm_3')(drop_3)
 
-        concat = concatenate([maxp_1, maxp_2, maxp_3])
+        concat = concatenate([norm_1, norm_2, norm_3])
 
         dense_layer_1 = Dense(self.dense_1_dimenssions, activation=self.activation_fn, name='dense_1')(concat)
         drop_dense_layer_1 = Dropout(self.dense_dropout, name='drop_dense_1')(dense_layer_1)
 
-        output = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_1)
+        output = Dense(self.n_classes, activation='softmax', name='output')(drop_dense_layer_1)
 
         return Model(input_layer, output)
 
@@ -63,7 +71,7 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         model = self.build_model()
         print(model.summary())
 
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
                                                save_best_only=True, mode='min')
