@@ -73,9 +73,9 @@ class ToxicityCNNClassifier(ToxicityClassifier):
 
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        modelCheckPoint = ModelCheckpoint(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
-                                               save_best_only=True, mode='min')
-        earlyStopping = EarlyStopping(mode='min', patience=self.patience)
+        modelCheckPoint = ModelCheckpoint(monitor='val_acc', filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5',
+                                               save_best_only=True, mode='max')
+        earlyStopping = EarlyStopping(monitor='val_acc', mode='max', patience=self.patience)
 
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
