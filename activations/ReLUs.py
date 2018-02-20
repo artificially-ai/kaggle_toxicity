@@ -18,6 +18,6 @@ class ReLUs(Activation):
     def relus(Z):
         e = ReLUs.e_param
         pi = K.variable((3.14))
-        m = e + (K.sigmoid(K.sin(Z)) - K.sigmoid(K.cos(Z)) * K.exp(K.sqrt(pi)))
+        m = e * (K.sigmoid(K.sin(Z)) - K.sigmoid(K.cos(Z)) * K.exp(K.sqrt(pi)))
         A = K.maximum(m, Z)
         return A
