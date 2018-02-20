@@ -67,11 +67,13 @@ class ToxicityCNNClassifier(ToxicityClassifier):
 
         output = Dense(self.n_classes, activation='sigmoid', name='output')(drop_dense_layer_1)
 
-        return Model(input_layer, output)
+        model = Model(input_layer, output)
+        print(model.summary())
+
+        return model
 
     def compile_model(self):
         model = self.build_model()
-        print(model.summary())
 
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
