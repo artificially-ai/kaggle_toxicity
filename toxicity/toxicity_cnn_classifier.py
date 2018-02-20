@@ -93,8 +93,13 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2,
                   validation_data=(X_valid, y_valid), callbacks=[modelCheckPoint, earlyStopping])
 
-        saved_model = keras.models.load_model(self.output_dir + '/weights-multicnn-toxicity.hdf5')
-        y_hat = saved_model.predict(X_test_sub)
+        # Save the current model.
+        model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
+
+        # Load the best weights.
+        model.load_weights(filepath=self.output_dir + '/weights-multicnn-toxicity.hdf5')
+
+        y_hat = model.predict(X_test_sub)
         self.save_submission(y_hat)
 
     def save_submission(self, y_hat):
