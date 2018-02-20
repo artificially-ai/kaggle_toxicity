@@ -1,4 +1,6 @@
 import os
+
+import keras
 import pandas as pd
 
 from keras.models import Model
@@ -89,8 +91,8 @@ class ToxicityCNNClassifier(ToxicityClassifier):
         model.fit(X_train, y_train, batch_size=self.batch_size, epochs=self.epochs, verbose=2,
                   validation_data=(X_valid, y_valid), callbacks=[modelCheckPoint, earlyStopping])
 
-        model.save(filepath=self.output_dir + '/model-multicnn-toxicity.hdf5')
-        y_hat = model.predict(X_test_sub)
+        saved_model = keras.models.load_model(self.output_dir + '/weights-multicnn-toxicity.hdf5')
+        y_hat = saved_model.predict(X_test_sub)
         self.save_submission(y_hat)
 
     def save_submission(self, y_hat):
