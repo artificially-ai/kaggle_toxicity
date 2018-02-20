@@ -4,7 +4,7 @@
   "batch_size" : 256,
   "patience" : 1,
   "activation_fn" : "relus",
-  "e_param" : 1.8,
+  "e_param" : 0.05,
   "test_split" : 0.1,
   "input_dimensions" : 512,
   "unique_words" : 20000,
